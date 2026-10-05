@@ -63,7 +63,7 @@
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link rel="icon" href="data:,">
-    
+
     <style>
         @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
         body {
@@ -779,6 +779,17 @@
             bookTop9Slot,
         };
     </script>
+
+    <script>
+        // Global Function Wrapper to avoid "bookTop9Slot is not defined" error
+        window.bookTop9Slot = async function(...args) {
+            if (window.api && window.api.bookTop9Slot) {
+                return await window.api.bookTop9Slot(...args);
+            } else {
+                console.error("API module is still loading... Please wait.");
+            }
+        };
+    </script>
     
     <!-- ================= JAVASCRIPT LOGIC ================= -->
     <script>
@@ -789,28 +800,36 @@
         let bookedVouchersList = [];
         let currentStep = 'auth';
 
-        // Initializer on window load
+       // Initializer on window load
         window.addEventListener('DOMContentLoaded', () => {
-            initParticleCanvas();
-            startCountdownTimer();
-            startLiveTicker();
+           initParticleCanvas();
+           startCountdownTimer();
+       
+           // API Ready hone par Ticker start karein
+           if (window.api && window.api.getTop10Bookings) {
+               startLiveTicker();
+           } else {
+               window.addEventListener('apiReady', () => {
+                   startLiveTicker();
+               });
+           }
+       
+           // Check persistent session
+           const savedUser = localStorage.getItem('utsav_user_session');
+           if (savedUser) {
+               currentUser = JSON.parse(savedUser);
+               userReferrals = currentUser.referralCount || 0;
+               bookedVouchersList = currentUser.bookedVouchers || [];
+               renderHeaderUserWidget();
+               
+               history.replaceState({ step: 'step-1' }, '', '#step-1');
+               renderStepUI('step-1');
+           } else {
+               history.replaceState({ step: 'auth' }, '', '#auth');
+               renderStepUI('auth');
+           }
 
-            // Check persistent session
-            const savedUser = localStorage.getItem('utsav_user_session');
-            if (savedUser) {
-                currentUser = JSON.parse(savedUser);
-                userReferrals = currentUser.referralCount || 0;
-                bookedVouchersList = currentUser.bookedVouchers || [];
-                renderHeaderUserWidget();
-                
-                history.replaceState({ step: 'step-1' }, '', '#step-1');
-                renderStepUI('step-1');
-            } else {
-                history.replaceState({ step: 'auth' }, '', '#auth');
-                renderStepUI('auth');
-            }
-
-            setupOtpDigitInputs();
+           setupOtpDigitInputs();
         });
 
         // ================= BROWSER BACK BUTTON NAVIGATION (popstate) =================
@@ -912,11 +931,15 @@
 
         async function handleSignupSubmit(e) {
             e.preventDefault();
+            if (!window.api || !window.api.sendOtp) {
+                showToast("System connecting to server... Please try again in 2 seconds.", "error");
+                return;
+            }
+            
             const name = document.getElementById('su-name').value;
             const mobile = document.getElementById('su-mobile').value;
             const password = document.getElementById('su-password').value;
         
-            // Backend API Call - Send OTP
             const res = await window.api.sendOtp(mobile);
             
             if (res.status === 'success' || res.status === 200) {
