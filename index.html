@@ -1,0 +1,1361 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>UTSAV PASS 2026 | Grand Diwali E-Commerce Rewards & Bumper Lucky Draw</title>
+    
+    <!-- 1. Suppress Tailwind CDN Console Warning before script loads -->
+    <script>
+        (function() {
+            const originalWarn = console.warn;
+            console.warn = function(...args) {
+                if (args[0] && typeof args[0] === 'string' && args[0].includes('cdn.tailwindcss.com')) {
+                    return; // Suppress Tailwind CDN production warning
+                }
+                originalWarn.apply(console, args);
+            };
+        })();
+    </script>
+    
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        utsav: {
+                            gold: '#FFD700',
+                            amber: '#F59E0B',
+                            crimson: '#DC2626',
+                            dark: '#0B0E17',
+                            card: '#141A29'
+                        }
+                    },
+                    animation: {
+                        'pulse-glow': 'pulseGlow 2s cubic-bezier(0.4, 0, 0.6, 1) infinite',
+                        'laser-scan': 'laserScan 3s linear infinite',
+                        'shimmer': 'shimmer 2.5s infinite linear'
+                    },
+                    keyframes: {
+                        pulseGlow: {
+                            '0%, 100%': { opacity: '0.4', transform: 'scale(1)' },
+                            '50%': { opacity: '0.8', transform: 'scale(1.05)' }
+                        },
+                        laserScan: {
+                            '0%': { top: '0%' },
+                            '50%': { top: '100%' },
+                            '100%': { top: '0%' }
+                        },
+                        shimmer: {
+                            '0%': { transform: 'translateX(-100%)' },
+                            '100%': { transform: 'translateX(100%)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="icon" href="data:,">
+    
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+        body {
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background-color: #0B0E17;
+            color: #F3F4F6;
+            overflow-x: hidden;
+        }
+        .gold-border-glow {
+            box-shadow: 0 0 25px -5px rgba(245, 158, 11, 0.3);
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+        .vip-pass-card {
+            background: linear-gradient(135deg, rgba(20,26,41,0.95) 0%, rgba(11,14,23,0.98) 100%);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+        }
+        .gold-gradient-text {
+            background: linear-gradient(135deg, #FFF5C0 0%, #FFD700 50%, #B8860B 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        /* Custom scrollbars */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #0B0E17;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #2D3748;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col justify-between relative selection:bg-amber-500 selection:text-black">
+
+    <!-- Particle Background Canvas -->
+    <canvas id="sparkle-canvas" class="fixed inset-0 pointer-events-none z-0 opacity-40"></canvas>
+
+    <!-- Festive Background Light Orbs -->
+    <div class="fixed top-0 left-1/2 -translate-x-1/2 w-full max-w-7xl h-96 bg-radial from-amber-600/15 via-orange-900/10 to-transparent pointer-events-none z-0 blur-3xl"></div>
+    <div class="fixed bottom-0 right-0 w-96 h-96 bg-radial from-red-600/10 via-transparent to-transparent pointer-events-none z-0 blur-3xl"></div>
+
+    <!-- Top Announcement Live Ticker -->
+    <div class="bg-gradient-to-r from-amber-900/80 via-yellow-900/90 to-amber-900/80 border-b border-amber-500/30 text-amber-200 text-xs py-2 px-4 relative z-20 overflow-hidden shadow-lg">
+        <div class="max-w-7xl mx-auto flex items-center justify-between">
+            <div class="flex items-center space-x-2 shrink-0 font-bold uppercase tracking-wider text-[11px] text-amber-300">
+                <span class="w-2 h-2 rounded-full bg-emerald-400 animate-ping"></span>
+                <span>🔥 Live Festive Ticker:</span>
+            </div>
+            <div class="overflow-hidden relative w-full ml-4">
+                <div id="ticker-text" class="whitespace-nowrap transition-all duration-500 font-medium">
+                    Rahul S. from Mumbai booked Amazon & Apple Store ₹2,000 Vouchers • Priya M. booked Blinkit & Zepto Grocery Slots
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Header Navigation -->
+    <header class="w-full max-w-7xl mx-auto px-4 sm:px-6 py-5 flex justify-between items-center relative z-20">
+        <div class="flex items-center space-x-3 cursor-pointer" onclick="handleHeaderLogoClick()">
+            <div class="w-10 h-10 rounded-xl bg-gradient-to-tr from-amber-500 via-orange-500 to-yellow-300 flex items-center justify-center shadow-lg shadow-amber-500/20 text-black font-extrabold text-xl">
+                🪔
+            </div>
+            <div>
+                <span class="text-xl sm:text-2xl font-black tracking-wider gold-gradient-text block leading-none">UTSAV PASS</span>
+                <span class="text-[10px] text-amber-400/80 font-bold tracking-widest uppercase block mt-0.5">Diwali Mega Rewards Portal</span>
+            </div>
+        </div>
+
+        <!-- User Profile Header Widget -->
+        <div id="header-user-widget" class="flex items-center space-x-3">
+            <!-- Rendered dynamically via JS -->
+        </div>
+    </header>
+
+    <!-- Main Container -->
+    <main class="flex-grow flex items-center justify-center px-3 sm:px-6 py-6 relative z-10">
+        <div class="w-full max-w-4xl">
+
+            <!-- ================= AUTHENTICATION MODAL / PANEL ================= -->
+            <div id="auth-panel" class="bg-[#141A29]/90 backdrop-blur-2xl border border-amber-500/30 rounded-3xl p-6 sm:p-10 gold-border-glow relative overflow-hidden shadow-2xl transition-all">
+                
+                <!-- Festive Header inside Card -->
+                <div class="text-center space-y-3 mb-8">
+                    <div class="inline-flex items-center space-x-2 px-3 py-1 rounded-full bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold uppercase tracking-widest">
+                        <span>🪔 Diwali Bumper Dhamaka 2026</span>
+                    </div>
+                    <h1 class="text-2xl sm:text-4xl font-black text-white tracking-tight leading-tight">
+                        Guaranteed <span class="gold-gradient-text">₹2,000 Vouchers</span> & Bumper Lucky Draw
+                    </h1>
+                    <p class="text-gray-300 text-xs sm:text-sm max-w-md mx-auto">
+                        All registered users get <span class="text-emerald-400 font-bold">100% Guaranteed ₹2,000 Vouchers</span> across all top shopping & grocery sites. Share to qualify for <span class="text-amber-400 font-bold">Top 51 Bumper Prizes!</span>
+                    </p>
+                </div>
+
+                <!-- Auth Tabs (Sign Up / Login) -->
+                <div class="flex bg-[#0B0E17]/80 p-1.5 rounded-2xl border border-gray-800 mb-6">
+                    <button id="tab-signup-btn" onclick="switchAuthTab('signup')" class="flex-1 py-3 text-xs sm:text-sm font-bold rounded-xl transition-all duration-200 bg-gradient-to-r from-amber-500 to-orange-500 text-black shadow-lg">
+                        Create Festive Pass (Sign Up)
+                    </button>
+                    <button id="tab-login-btn" onclick="switchAuthTab('login')" class="flex-1 py-3 text-xs sm:text-sm font-bold text-gray-400 hover:text-white rounded-xl transition-all duration-200">
+                        Existing User Login
+                    </button>
+                </div>
+
+                <!-- SIGN UP FORM -->
+                <form id="signup-form" onsubmit="handleSignupSubmit(event)" class="space-y-4">
+                    
+                    <!-- Professional Security Assurance Message -->
+                    <div class="bg-gradient-to-r from-emerald-500/10 via-teal-500/10 to-emerald-500/10 border border-emerald-500/30 rounded-2xl p-3.5 flex items-start space-x-3 text-xs text-emerald-300">
+                        <div class="w-8 h-8 rounded-xl bg-emerald-500/20 border border-emerald-500/40 flex items-center justify-center shrink-0 text-emerald-400 text-sm mt-0.5">
+                            <i class="fa-solid fa-shield-halved"></i>
+                        </div>
+                        <div class="p-4 bg-gray-900/50 rounded-xl border border-gray-800 my-4">
+                            <h3 class="text-emerald-400 font-bold text-sm md:text-base flex items-center gap-2 mb-2">
+                                🔒 100% Safe, Free & Confident Registration
+                            </h3>
+                            <!-- टेक्स्ट का साइज़ अब text-sm md:text-base है -->
+                            <p class="text-gray-300 text-sm md:text-base leading-relaxed">
+                                Aapki personal details aur mobile number 256-Bit Encrypted hai. Hum aapki privacy ki 100% guarantee dete hain — <strong class="text-white font-bold">Koi extra charges nahi, koi spam calls nahi!</strong> Free register karein aur instant vouchers claim karein.
+                            </p>
+                        </div>
+                    </div>
+
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                            <label class="block text-[11px] font-bold text-amber-300/80 uppercase tracking-wider mb-1">Full Name</label>
+                            <input type="text" id="su-name" required placeholder="e.g. Vikram Sharma" class="w-full px-4 py-3 bg-[#0B0E17] border border-gray-700 focus:border-amber-500 rounded-xl text-white placeholder-gray-600 outline-none text-sm transition">
+                        </div>
+                        <div>
+                            <label class="block text-[11px] font-bold text-amber-300/80 uppercase tracking-wider mb-1">Mobile Number (+91)</label>
+                            <input type="tel" id="su-mobile" pattern="[0-9]{10}" maxlength="10" required placeholder="10-digit phone number" class="w-full px-4 py-3 bg-[#0B0E17] border border-gray-700 focus:border-amber-500 rounded-xl text-white placeholder-gray-600 outline-none text-sm transition">
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-amber-300/80 uppercase tracking-wider mb-1">Create Password</label>
+                        <input type="password" id="su-password" required minlength="6" placeholder="At least 6 characters" class="w-full px-4 py-3 bg-[#0B0E17] border border-gray-700 focus:border-amber-500 rounded-xl text-white placeholder-gray-600 outline-none text-sm transition">
+                    </div>
+
+                    <button type="submit" class="w-full py-4 bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-black font-extrabold rounded-xl shadow-xl shadow-amber-500/20 text-sm uppercase tracking-wider transition transform active:scale-95 cursor-pointer mt-2">
+                        Get Demo OTP & Register Free →
+                    </button>
+                </form>
+
+                <!-- LOGIN FORM -->
+                <form id="login-form" onsubmit="handleLoginSubmit(event)" class="space-y-4 hidden">
+                    <div class="flex items-center justify-center space-x-6 text-xs mb-2">
+                        <label class="flex items-center space-x-2 cursor-pointer text-amber-300 font-semibold">
+                            <input type="radio" name="login-type" value="password" checked onclick="toggleLoginType('password')" class="accent-amber-500">
+                            <span>Password Login</span>
+                        </label>
+                        <label class="flex items-center space-x-2 cursor-pointer text-amber-300 font-semibold">
+                            <input type="radio" name="login-type" value="otp" onclick="toggleLoginType('otp')" class="accent-amber-500">
+                            <span>Mobile OTP Login</span>
+                        </label>
+                    </div>
+
+                    <div>
+                        <label class="block text-[11px] font-bold text-amber-300/80 uppercase tracking-wider mb-1" id="login-identifier-label">Mobile Number</label>
+                        <input type="text" id="lg-identifier" required placeholder="Enter mobile number" class="w-full px-4 py-3 bg-[#0B0E17] border border-gray-700 focus:border-amber-500 rounded-xl text-white placeholder-gray-600 outline-none text-sm transition">
+                    </div>
+
+                    <div id="login-password-group">
+                        <label class="block text-[11px] font-bold text-amber-300/80 uppercase tracking-wider mb-1">Password</label>
+                        <input type="password" id="lg-password" placeholder="Enter your password" class="w-full px-4 py-3 bg-[#0B0E17] border border-gray-700 focus:border-amber-500 rounded-xl text-white placeholder-gray-600 outline-none text-sm transition">
+                    </div>
+
+                    <button type="submit" id="login-submit-btn" class="w-full py-4 bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-400 hover:from-amber-400 hover:to-yellow-300 text-black font-extrabold rounded-xl shadow-xl shadow-amber-500/20 text-sm uppercase tracking-wider transition transform active:scale-95 cursor-pointer">
+                        Login to Utsav Dashboard →
+                    </button>
+
+                    <div class="pt-3 border-t border-gray-800/80 text-center">
+                        <button type="button" onclick="fillDemoCredentials()" class="text-xs text-amber-400 hover:text-amber-300 underline font-medium">
+                            ⚡ Quick Test: Auto-fill Demo Account Details
+                        </button>
+                    </div>
+                </form>
+
+                <div class="mt-6 pt-4 border-t border-gray-800 flex items-center justify-between text-xs text-gray-400">
+                    <span class="flex items-center space-x-1.5">
+                        <i class="fa-solid fa-shield-halved text-emerald-400"></i>
+                        <span>256-Bit SSL Encrypted Access</span>
+                    </span>
+                    <span class="text-amber-400 font-semibold">2,000 Slots Filling Fast</span>
+                </div>
+            </div>
+
+
+            <!-- ================= OTP VERIFICATION MODAL ================= -->
+            <div id="otp-modal" class="fixed inset-0 bg-black/80 backdrop-blur-md flex items-center justify-center p-4 z-50 hidden">
+                <div class="bg-[#141A29] border border-amber-500/40 rounded-3xl p-6 sm:p-8 max-w-md w-full gold-border-glow relative animate-fadeIn">
+                    <button onclick="closeOtpModal()" class="absolute top-4 right-4 text-gray-400 hover:text-white text-lg">✕</button>
+
+                    <div class="text-center space-y-3">
+                        <div class="w-14 h-14 bg-amber-500/10 rounded-2xl border border-amber-500/30 flex items-center justify-center mx-auto text-amber-400 text-2xl">
+                            📲
+                        </div>
+                        <h3 class="text-xl font-bold text-white">Enter Mobile OTP</h3>
+                        <p class="text-xs text-gray-300">
+                            We sent a 6-digit verification code to <span id="otp-phone-display" class="text-amber-300 font-bold">+91 XXXXX XXXXX</span>
+                        </p>
+                    </div>
+
+                    <div class="my-4 p-3 bg-amber-500/10 border border-amber-500/30 rounded-xl text-center">
+                        <span class="text-xs text-amber-300 font-bold block">🔑 DEMO VERIFICATION OTP:</span>
+                        <span class="text-xl font-black text-amber-400 tracking-widest my-1 block">123456</span>
+                        <button type="button" onclick="autoFillDummyOtp()" class="text-[11px] text-emerald-400 underline hover:text-emerald-300 font-semibold">
+                            ⚡ Click Here to Auto-Fill 123456
+                        </button>
+                    </div>
+
+                    <div class="flex justify-between gap-2 my-4" id="otp-inputs-container">
+                        <input type="text" maxlength="1" class="otp-box w-12 h-12 text-center bg-[#0B0E17] border border-gray-700 rounded-xl text-white font-bold text-lg focus:border-amber-500 outline-none">
+                        <input type="text" maxlength="1" class="otp-box w-12 h-12 text-center bg-[#0B0E17] border border-gray-700 rounded-xl text-white font-bold text-lg focus:border-amber-500 outline-none">
+                        <input type="text" maxlength="1" class="otp-box w-12 h-12 text-center bg-[#0B0E17] border border-gray-700 rounded-xl text-white font-bold text-lg focus:border-amber-500 outline-none">
+                        <input type="text" maxlength="1" class="otp-box w-12 h-12 text-center bg-[#0B0E17] border border-gray-700 rounded-xl text-white font-bold text-lg focus:border-amber-500 outline-none">
+                        <input type="text" maxlength="1" class="otp-box w-12 h-12 text-center bg-[#0B0E17] border border-gray-700 rounded-xl text-white font-bold text-lg focus:border-amber-500 outline-none">
+                        <input type="text" maxlength="1" class="otp-box w-12 h-12 text-center bg-[#0B0E17] border border-gray-700 rounded-xl text-white font-bold text-lg focus:border-amber-500 outline-none">
+                    </div>
+
+                    <button onclick="verifyOtpAndProceed()" class="w-full py-3.5 bg-gradient-to-r from-emerald-500 to-teal-500 hover:from-emerald-400 hover:to-teal-400 text-black font-extrabold rounded-xl shadow-lg shadow-emerald-500/20 text-sm uppercase tracking-wider transition cursor-pointer">
+                        Verify OTP & Unlock Access ✓
+                    </button>
+
+                    <div class="text-center mt-3 text-xs text-gray-500">
+                        Didn't receive code? <span class="text-amber-400 cursor-pointer hover:underline" onclick="autoFillDummyOtp()">Resend OTP (123456)</span>
+                    </div>
+                </div>
+            </div>
+
+
+            <!-- ================= STEP 1: ALL EXHAUSTIVE E-COMMERCE & GROCERY SLOTS ================= -->
+            <div id="booking-step-panel" class="bg-[#141A29]/90 backdrop-blur-2xl border border-amber-500/30 rounded-3xl p-6 sm:p-8 gold-border-glow relative overflow-hidden shadow-2xl hidden space-y-6">
+                
+                <!-- Countdown Sale Banner -->
+                <div class="bg-gradient-to-r from-amber-500/10 via-orange-500/10 to-amber-500/10 border border-amber-500/30 rounded-2xl p-4 flex flex-col sm:flex-row items-center justify-between text-center sm:text-left gap-3">
+                    <div>
+                        <span class="text-xs font-bold text-amber-400 uppercase tracking-widest block">🪔 Diwali Sale Advance Booking</span>
+                        <span class="text-white text-sm font-bold">Voucher Slots Auto-Lock in:</span>
+                    </div>
+                    <div id="countdown-timer" class="flex space-x-2 font-mono font-black text-amber-300 text-lg sm:text-xl">
+                        <span class="bg-[#0B0E17] px-2.5 py-1 rounded-lg border border-amber-500/30" id="timer-hrs">13d</span>:
+                        <span class="bg-[#0B0E17] px-2.5 py-1 rounded-lg border border-amber-500/30" id="timer-hrs">04</span>:
+                        <span class="bg-[#0B0E17] px-2.5 py-1 rounded-lg border border-amber-500/30" id="timer-mins">38</span>:
+                        <span class="bg-[#0B0E17] px-2.5 py-1 rounded-lg border border-amber-500/30" id="timer-secs">12</span>
+                    </div>
+                </div>
+
+                <!-- NEW: FIXED ANNOUNCEMENT & RESULT DATE NOTICE BANNER -->
+                <div class="bg-gradient-to-r from-blue-600/15 via-indigo-600/15 to-purple-600/15 border border-indigo-500/40 rounded-2xl p-4 flex items-start space-x-3 text-xs text-indigo-200 shadow-inner">
+                    <div class="w-9 h-9 rounded-xl bg-indigo-500/20 border border-indigo-500/40 flex items-center justify-center shrink-0 text-indigo-400 text-lg mt-0.5">
+                        <i class="fa-solid fa-calendar-check"></i>
+                    </div>
+                    <div class="p-5 bg-amber-950/20 border border-amber-500/35 rounded-xl my-6 text-center">
+                        <h4 class="text-amber-400 font-bold text-base mb-2 flex items-center justify-center gap-2">
+                            📢 Official Vouchers & Lucky Draw Winner Announcement Date
+                        </h4>
+                        <!-- टेक्स्ट का साइज़ अब text-sm md:text-base है -->
+                        <p class="text-gray-200 text-sm md:text-base font-medium leading-relaxed">
+                            As soon as the total <strong class="text-white font-bold">2,000 slots are full</strong>, the final result for all claimed ₹2,000 Vouchers and Bumper Lucky Draw Winners will be announced on this Portal on <strong class="text-emerald-400 font-bold underline">15 November 2026 (Diwali Maha Parv)</strong>, and the Voucher Codes will be sent to your registered Mobile No.!
+                        </p>
+                    </div>
+                </div>
+
+                <div class="text-center space-y-2">
+                    <div class="inline-flex items-center space-x-2 px-3 py-1 bg-emerald-500/10 border border-emerald-500/30 rounded-full text-emerald-400 text-xs font-bold uppercase tracking-wide">
+                        <span>✓ Guaranteed ₹2,000 Voucher Allocation</span>
+                    </div>
+                    <h2 class="text-2xl sm:text-3xl font-black text-white">Pre-Book Vouchers for All Major Brands</h2>
+                    <p class="text-gray-300 text-xs sm:text-sm max-w-xl mx-auto">
+                        <strong class="text-emerald-400">All users are eligible!</strong> Click to book ₹2,000 voucher slots for <span class="text-amber-300 font-bold">ANY or ALL platforms</span> below.
+                    </p>
+                </div>
+
+                <!-- Multi-booking summary sticky pill -->
+                <div class="bg-[#0B0E17] p-3.5 rounded-2xl border border-gray-800 flex items-center justify-between text-xs sm:text-sm">
+                    <span class="text-gray-300 flex items-center gap-2">
+                        <i class="fa-solid fa-gift text-amber-400"></i>
+                        <span>Your Unlocked Rewards:</span>
+                    </span>
+                    <span id="booked-count-badge" class="font-black text-amber-400">0 of 16 Vouchers Claimed (₹0 Value)</span>
+                </div>
+
+                <!-- ALL EXTENDED BRANDS GRID (16 BRANDS) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="voucher-platforms-grid">
+                    
+                    <!-- 1. Amazon -->
+                    <div class="p-3.5 bg-[#0B0E17]/80 border border-gray-800 rounded-2xl hover:border-amber-500/40 transition flex items-center justify-between">
+                        <div class="space-y-0.5">
+                            <span class="text-base font-black text-amber-400 block">Amazon</span>
+                            <span class="text-[10px] text-gray-400 block">Mega Festival ₹2,000</span>
+                        </div>
+                        <button onclick="bookVoucherSlot(this, 'Amazon')" class="px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-extrabold rounded-xl transition cursor-pointer">
+                            Book Slot
+                        </button>
+                    </div>
+
+                    <!-- 2. Flipkart -->
+                    <div class="p-3.5 bg-[#0B0E17]/80 border border-gray-800 rounded-2xl hover:border-amber-500/40 transition flex items-center justify-between">
+                        <div class="space-y-0.5">
+                            <span class="text-base font-black text-blue-400 block">Flipkart</span>
+                            <span class="text-[10px] text-gray-400 block">Big Billion ₹2,000</span>
+                        </div>
+                        <button onclick="bookVoucherSlot(this, 'Flipkart')" class="px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-extrabold rounded-xl transition cursor-pointer">
+                            Book Slot
+                        </button>
+                    </div>
+
+                    <!-- 3. Apple Store -->
+                    <div class="p-3.5 bg-[#0B0E17]/80 border border-gray-800 rounded-2xl hover:border-amber-500/40 transition flex items-center justify-between">
+                        <div class="space-y-0.5">
+                            <span class="text-base font-black text-gray-200 block">Apple Store</span>
+                            <span class="text-[10px] text-gray-400 block">iStore Voucher ₹2,000</span>
+                        </div>
+                        <button onclick="bookVoucherSlot(this, 'Apple Store')" class="px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-extrabold rounded-xl transition cursor-pointer">
+                            Book Slot
+                        </button>
+                    </div>
+
+                    <!-- 4. Reliance Digital -->
+                    <div class="p-3.5 bg-[#0B0E17]/80 border border-gray-800 rounded-2xl hover:border-amber-500/40 transition flex items-center justify-between">
+                        <div class="space-y-0.5">
+                            <span class="text-base font-black text-red-500 block">Reliance Digital</span>
+                            <span class="text-[10px] text-gray-400 block">Tech Offer ₹2,000</span>
+                        </div>
+                        <button onclick="bookVoucherSlot(this, 'Reliance Digital')" class="px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-extrabold rounded-xl transition cursor-pointer">
+                            Book Slot
+                        </button>
+                    </div>
+
+                    <!-- 5. Meesho -->
+                    <div class="p-3.5 bg-[#0B0E17]/80 border border-gray-800 rounded-2xl hover:border-amber-500/40 transition flex items-center justify-between">
+                        <div class="space-y-0.5">
+                            <span class="text-base font-black text-pink-500 block">Meesho</span>
+                            <span class="text-[10px] text-gray-400 block">Maha Shopping ₹2,000</span>
+                        </div>
+                        <button onclick="bookVoucherSlot(this, 'Meesho')" class="px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-extrabold rounded-xl transition cursor-pointer">
+                            Book Slot
+                        </button>
+                    </div>
+
+                    <!-- 6. Lenskart -->
+                    <div class="p-3.5 bg-[#0B0E17]/80 border border-gray-800 rounded-2xl hover:border-amber-500/40 transition flex items-center justify-between">
+                        <div class="space-y-0.5">
+                            <span class="text-base font-black text-teal-400 block">Lenskart</span>
+                            <span class="text-[10px] text-gray-400 block">Eyewear Pass ₹2,000</span>
+                        </div>
+                        <button onclick="bookVoucherSlot(this, 'Lenskart')" class="px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-extrabold rounded-xl transition cursor-pointer">
+                            Book Slot
+                        </button>
+                    </div>
+
+                    <!-- 7. Myntra -->
+                    <div class="p-3.5 bg-[#0B0E17]/80 border border-gray-800 rounded-2xl hover:border-amber-500/40 transition flex items-center justify-between">
+                        <div class="space-y-0.5">
+                            <span class="text-base font-black text-pink-400 block">Myntra</span>
+                            <span class="text-[10px] text-gray-400 block">Fashion Utsav ₹2,000</span>
+                        </div>
+                        <button onclick="bookVoucherSlot(this, 'Myntra')" class="px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-extrabold rounded-xl transition cursor-pointer">
+                            Book Slot
+                        </button>
+                    </div>
+
+                    <!-- 8. Ajio -->
+                    <div class="p-3.5 bg-[#0B0E17]/80 border border-gray-800 rounded-2xl hover:border-amber-500/40 transition flex items-center justify-between">
+                        <div class="space-y-0.5">
+                            <span class="text-base font-black text-yellow-400 block">Ajio</span>
+                            <span class="text-[10px] text-gray-400 block">Manifest Sale ₹2,000</span>
+                        </div>
+                        <button onclick="bookVoucherSlot(this, 'Ajio')" class="px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-extrabold rounded-xl transition cursor-pointer">
+                            Book Slot
+                        </button>
+                    </div>
+
+                    <!-- 9. Nykaa -->
+                    <div class="p-3.5 bg-[#0B0E17]/80 border border-gray-800 rounded-2xl hover:border-amber-500/40 transition flex items-center justify-between">
+                        <div class="space-y-0.5">
+                            <span class="text-base font-black text-rose-400 block">Nykaa</span>
+                            <span class="text-[10px] text-gray-400 block">Beauty Dhamaka ₹2,000</span>
+                        </div>
+                        <button onclick="bookVoucherSlot(this, 'Nykaa')" class="px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-extrabold rounded-xl transition cursor-pointer">
+                            Book Slot
+                        </button>
+                    </div>
+
+                    <!-- 10. Tata CLiQ -->
+                    <div class="p-3.5 bg-[#0B0E17]/80 border border-gray-800 rounded-2xl hover:border-amber-500/40 transition flex items-center justify-between">
+                        <div class="space-y-0.5">
+                            <span class="text-base font-black text-purple-400 block">Tata CLiQ</span>
+                            <span class="text-[10px] text-gray-400 block">Luxury Sale ₹2,000</span>
+                        </div>
+                        <button onclick="bookVoucherSlot(this, 'Tata CLiQ')" class="px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-extrabold rounded-xl transition cursor-pointer">
+                            Book Slot
+                        </button>
+                    </div>
+
+                    <!-- 11. Blinkit (Grocery) -->
+                    <div class="p-3.5 bg-[#0B0E17]/80 border border-gray-800 rounded-2xl hover:border-amber-500/40 transition flex items-center justify-between">
+                        <div class="space-y-0.5">
+                            <span class="text-base font-black text-yellow-300 block">Blinkit</span>
+                            <span class="text-[10px] text-emerald-400 font-semibold block">⚡ Grocery Pass ₹2,000</span>
+                        </div>
+                        <button onclick="bookVoucherSlot(this, 'Blinkit')" class="px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-extrabold rounded-xl transition cursor-pointer">
+                            Book Slot
+                        </button>
+                    </div>
+
+                    <!-- 12. Zepto (Grocery) -->
+                    <div class="p-3.5 bg-[#0B0E17]/80 border border-gray-800 rounded-2xl hover:border-amber-500/40 transition flex items-center justify-between">
+                        <div class="space-y-0.5">
+                            <span class="text-base font-black text-purple-300 block">Zepto</span>
+                            <span class="text-[10px] text-emerald-400 font-semibold block">⚡ 10-Min Grocery ₹2,000</span>
+                        </div>
+                        <button onclick="bookVoucherSlot(this, 'Zepto')" class="px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-extrabold rounded-xl transition cursor-pointer">
+                            Book Slot
+                        </button>
+                    </div>
+
+                    <!-- 13. Swiggy Instamart -->
+                    <div class="p-3.5 bg-[#0B0E17]/80 border border-gray-800 rounded-2xl hover:border-amber-500/40 transition flex items-center justify-between">
+                        <div class="space-y-0.5">
+                            <span class="text-base font-black text-orange-400 block">Instamart</span>
+                            <span class="text-[10px] text-emerald-400 font-semibold block">⚡ Festive Grocery ₹2,000</span>
+                        </div>
+                        <button onclick="bookVoucherSlot(this, 'Instamart')" class="px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-extrabold rounded-xl transition cursor-pointer">
+                            Book Slot
+                        </button>
+                    </div>
+
+                    <!-- 14. BigBasket -->
+                    <div class="p-3.5 bg-[#0B0E17]/80 border border-gray-800 rounded-2xl hover:border-amber-500/40 transition flex items-center justify-between">
+                        <div class="space-y-0.5">
+                            <span class="text-base font-black text-green-400 block">BigBasket</span>
+                            <span class="text-[10px] text-emerald-400 font-semibold block">⚡ Super Grocery ₹2,000</span>
+                        </div>
+                        <button onclick="bookVoucherSlot(this, 'BigBasket')" class="px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-extrabold rounded-xl transition cursor-pointer">
+                            Book Slot
+                        </button>
+                    </div>
+
+                    <!-- 15. JioMart -->
+                    <div class="p-3.5 bg-[#0B0E17]/80 border border-gray-800 rounded-2xl hover:border-amber-500/40 transition flex items-center justify-between">
+                        <div class="space-y-0.5">
+                            <span class="text-base font-black text-blue-500 block">JioMart</span>
+                            <span class="text-[10px] text-gray-400 block">Bumper Grocery ₹2,000</span>
+                        </div>
+                        <button onclick="bookVoucherSlot(this, 'JioMart')" class="px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-extrabold rounded-xl transition cursor-pointer">
+                            Book Slot
+                        </button>
+                    </div>
+
+                    <!-- 16. Decathlon -->
+                    <div class="p-3.5 bg-[#0B0E17]/80 border border-gray-800 rounded-2xl hover:border-amber-500/40 transition flex items-center justify-between">
+                        <div class="space-y-0.5">
+                            <span class="text-base font-black text-cyan-400 block">Decathlon</span>
+                            <span class="text-[10px] text-gray-400 block">Sports & Gear ₹2,000</span>
+                        </div>
+                        <button onclick="bookVoucherSlot(this, 'Decathlon')" class="px-3 py-2 bg-gradient-to-r from-amber-500 to-orange-500 text-black text-xs font-extrabold rounded-xl transition cursor-pointer">
+                            Book Slot
+                        </button>
+                    </div>
+
+                </div>
+
+                <!-- NEXT STEP BUTTON TO UNIFIED DRAW & REFERRAL PAGE -->
+                <div class="pt-4 text-center">
+                    <button onclick="goToStep('step-2')" class="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-emerald-500 via-teal-500 to-emerald-400 text-black font-black rounded-2xl shadow-xl shadow-emerald-500/20 text-sm uppercase tracking-wider hover:opacity-95 transition cursor-pointer">
+                        Proceed to Grand Bumper Draw & Referral Rank →
+                    </button>
+                </div>
+            </div>
+
+
+            <!-- ================= UNIFIED STEP 2: BUMPER DRAW SELECTION + VIP PASS + REFERRAL RANKINGS ================= -->
+            <div id="unified-draw-panel" class="bg-[#141A29]/90 backdrop-blur-2xl border border-amber-500/30 rounded-3xl p-6 sm:p-8 gold-border-glow relative overflow-hidden shadow-2xl hidden space-y-8">
+                
+                <!-- Top Navigation & Step Tracker -->
+                <div class="flex items-center justify-between border-b border-gray-800 pb-4">
+                    <button onclick="handleBackStep()" class="text-xs font-bold text-amber-400 hover:text-amber-300 flex items-center space-x-1 cursor-pointer">
+                        <span>← Back to Voucher Brands</span>
+                    </button>
+                    <span class="text-xs text-emerald-400 font-bold flex items-center gap-1">
+                        <i class="fa-solid fa-circle-check"></i>
+                        <span>Step 2 of 2: Grand Bumper Hub</span>
+                    </span>
+                </div>
+
+                <!-- SECTION A: GRAND BUMPER GIFTS LIST -->
+                <div class="space-y-4">
+                    <div class="text-center space-y-2">
+                        <div class="inline-flex items-center space-x-2 px-3 py-1 bg-amber-500/10 border border-amber-500/30 rounded-full text-amber-300 text-xs font-bold uppercase tracking-wide">
+                            <span>🎁 Bumper Lucky Winners Draw</span>
+                        </div>
+                        <h2 class="text-2xl sm:text-3xl font-black text-white">Select Your Bumper Lucky Draw Prize</h2>
+                        <p class="text-gray-300 text-xs sm:text-sm max-w-lg mx-auto">
+                            Choose your dream gift! Share the portal to boost your rank into the <strong class="text-amber-300">Top 51 Lucky Winners Zone</strong> for Diwali Day delivery.
+                        </p>
+                    </div>
+
+                    <!-- Bumper Gifts Grid -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="bumper-prizes-grid">
+                        
+                        <!-- iPhone 16 Pro Max -->
+                        <div onclick="selectBumperPrize('iphone', this)" class="bumper-card p-4 bg-[#0B0E17] border-2 border-gray-800 hover:border-amber-500 rounded-2xl cursor-pointer transition relative group">
+                            <div class="flex items-center justify-between">
+                                <span class="text-3xl">📱</span>
+                                <span class="text-[10px] font-bold bg-amber-500/10 text-amber-400 px-2.5 py-0.5 rounded-full border border-amber-500/30">3 Winners</span>
+                            </div>
+                            <h4 class="text-base font-bold text-white mt-2 group-hover:text-amber-300 transition">iPhone 18 Pro Max</h4>
+                            <p class="text-[11px] text-gray-400 mt-0.5">256GB Titanium Edition</p>
+                        </div>
+
+                        <!-- Apple MacBook Air -->
+                        <div onclick="selectBumperPrize('macbook', this)" class="bumper-card p-4 bg-[#0B0E17] border-2 border-gray-800 hover:border-amber-500 rounded-2xl cursor-pointer transition relative group">
+                            <div class="flex items-center justify-between">
+                                <span class="text-3xl">💻</span>
+                                <span class="text-[10px] font-bold bg-amber-500/10 text-amber-400 px-2.5 py-0.5 rounded-full border border-amber-500/30">2 Winners</span>
+                            </div>
+                            <h4 class="text-base font-bold text-white mt-2 group-hover:text-amber-300 transition">MacBook Air M3</h4>
+                            <p class="text-[11px] text-gray-400 mt-0.5">Latest Apple Silicon Laptop</p>
+                        </div>
+
+                        <!-- 24K Gold Coin 10g -->
+                        <div onclick="selectBumperPrize('gold', this)" class="bumper-card p-4 bg-[#0B0E17] border-2 border-gray-800 hover:border-amber-500 rounded-2xl cursor-pointer transition relative group">
+                            <div class="flex items-center justify-between">
+                                <span class="text-3xl">🪙</span>
+                                <span class="text-[10px] font-bold bg-amber-500/10 text-amber-400 px-2.5 py-0.5 rounded-full border border-amber-500/30">2 Winners</span>
+                            </div>
+                            <h4 class="text-base font-bold text-white mt-2 group-hover:text-amber-300 transition">24K Pure Gold Coin (10g)</h4>
+                            <p class="text-[11px] text-gray-400 mt-0.5">Hallmarked Certified Gold</p>
+                        </div>
+
+                        <!-- 55" OLED 4K Smart TV -->
+                        <div onclick="selectBumperPrize('tv', this)" class="bumper-card p-4 bg-[#0B0E17] border-2 border-gray-800 hover:border-amber-500 rounded-2xl cursor-pointer transition relative group">
+                            <div class="flex items-center justify-between">
+                                <span class="text-3xl">📺</span>
+                                <span class="text-[10px] font-bold bg-amber-500/10 text-amber-400 px-2.5 py-0.5 rounded-full border border-amber-500/30">7 Winners</span>
+                            </div>
+                            <h4 class="text-base font-bold text-white mt-2 group-hover:text-amber-300 transition">55" 4K OLED Smart TV</h4>
+                            <p class="text-[11px] text-gray-400 mt-0.5">Dolby Cinema & Atmos Sound</p>
+                        </div>
+
+                        <!-- Sony Headphones -->
+                        <div onclick="selectBumperPrize('headphones', this)" class="bumper-card p-4 bg-[#0B0E17] border-2 border-gray-800 hover:border-amber-500 rounded-2xl cursor-pointer transition relative group">
+                            <div class="flex items-center justify-between">
+                                <span class="text-3xl">🎧</span>
+                                <span class="text-[10px] font-bold bg-amber-500/10 text-amber-400 px-2.5 py-0.5 rounded-full border border-amber-500/30">35 Winners</span>
+                            </div>
+                            <h4 class="text-base font-bold text-white mt-2 group-hover:text-amber-300 transition">Sony ANC Headphones</h4>
+                            <p class="text-[11px] text-gray-400 mt-0.5">Wireless Noise Cancellation</p>
+                        </div>
+
+                        <!-- Vespa Scooty Voucher -->
+                        <div onclick="selectBumperPrize('scooty', this)" class="bumper-card p-4 bg-[#0B0E17] border-2 border-gray-800 hover:border-amber-500 rounded-2xl cursor-pointer transition relative group">
+                            <div class="flex items-center justify-between">
+                                <span class="text-3xl">🛵</span>
+                                <span class="text-[10px] font-bold bg-amber-500/10 text-amber-400 px-2.5 py-0.5 rounded-full border border-amber-500/30">2 Winners</span>
+                            </div>
+                            <h4 class="text-base font-bold text-white mt-2 group-hover:text-amber-300 transition">Vespa Festive Scooty</h4>
+                            <p class="text-[11px] text-gray-400 mt-0.5">Full On-Road Voucher</p>
+                        </div>
+
+                    </div>
+                </div>
+
+                <!-- SECTION B: HOLOGRAPHIC TICKET PASS & DUAL RANKING STATUS -->
+                <div class="vip-pass-card rounded-3xl p-6 sm:p-8 relative overflow-hidden shadow-2xl gold-border-glow space-y-6">
+                    <div class="absolute inset-x-0 h-1 bg-gradient-to-r from-transparent via-amber-400 to-transparent animate-laser-scan opacity-60 pointer-events-none"></div>
+
+                    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 border-b border-amber-500/20 pb-4">
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-amber-500 to-yellow-300 flex items-center justify-center text-black text-2xl font-black">
+                                🪔
+                            </div>
+                            <div>
+                                <span class="text-xs text-amber-400 font-extrabold uppercase tracking-widest block">OFFICIAL DIWALI TICKET</span>
+                                <h3 class="text-xl font-black text-white">GOLDEN UTSAV VIP PASS</h3>
+                            </div>
+                        </div>
+                        <div class="text-left sm:text-right">
+                            <span class="text-[10px] text-gray-400 uppercase tracking-widest block">PASS TICKET ID</span>
+                            <span id="pass-ticket-id" class="text-sm font-mono font-bold text-amber-300">#UTSAV-92841</span>
+                        </div>
+                    </div>
+
+                    <!-- Pass Holder Details -->
+                    <div class="grid grid-cols-2 sm:grid-cols-3 gap-4 text-xs border-b border-amber-500/20 pb-4">
+                        <div>
+                            <span class="text-gray-400 block text-[10px] uppercase">PASS HOLDER</span>
+                            <span id="pass-holder-name" class="text-white font-bold text-sm">----</span>
+                        </div>
+                        <div>
+                            <span class="text-gray-400 block text-[10px] uppercase">VERIFIED MOBILE</span>
+                            <span id="pass-holder-phone" class="text-white font-bold text-sm">----</span>
+                        </div>
+                        <div class="col-span-2 sm:col-span-1">
+                            <span class="text-gray-400 block text-[10px] uppercase">SELECTED BUMPER PRIZE</span>
+                            <span id="pass-selected-prize-name" class="text-amber-300 font-extrabold text-sm">iPhone 16 Pro Max</span>
+                        </div>
+                    </div>
+
+                    <!-- DUAL RANKINGS DASHBOARD -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <!-- Rank 1: Voucher Slot Allocation Rank -->
+                        <div class="bg-[#0B0E17]/90 p-4 rounded-2xl border border-emerald-500/30 flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-emerald-500/10 rounded-xl border border-emerald-500/30 flex items-center justify-center text-emerald-400 text-xl font-bold">
+                                🎟
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase font-bold block">Voucher Slot Allocation Rank</span>
+                                <span id="slot-rank-display" class="text-base font-black text-emerald-400">#0482 / 2,000 (Guaranteed ✓)</span>
+                            </div>
+                        </div>
+
+                        <!-- Rank 2: Lucky Draw Leaderboard Rank -->
+                        <div class="bg-[#0B0E17]/90 p-4 rounded-2xl border border-amber-500/30 flex items-center space-x-3">
+                            <div class="w-10 h-10 bg-amber-500/10 rounded-xl border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl font-bold">
+                                🏆
+                            </div>
+                            <div>
+                                <span class="text-[10px] text-gray-400 uppercase font-bold block">Bumper Draw Leaderboard Rank</span>
+                                <span id="ref-rank-display" class="text-base font-black text-amber-300">Rank #142 (Need Top 10)</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Laser Scanner Barcode -->
+                    <div class="pt-2 flex flex-col items-center justify-center space-y-1">
+                        <div class="h-8 w-full max-w-xs bg-gradient-to-r from-white via-gray-400 to-white opacity-80 rounded flex items-center justify-around px-2 overflow-hidden">
+                            <div class="w-1 h-full bg-black"></div><div class="w-2 h-full bg-black"></div><div class="w-0.5 h-full bg-black"></div><div class="w-3 h-full bg-black"></div><div class="w-1 h-full bg-black"></div><div class="w-2 h-full bg-black"></div><div class="w-1.5 h-full bg-black"></div><div class="w-3 h-full bg-black"></div><div class="w-1 h-full bg-black"></div>
+                        </div>
+                        <span class="text-[9px] text-amber-400/70 font-mono tracking-widest">ENCRYPTED DIWALI ENTRY PASS • 2026</span>
+                    </div>
+                </div>
+
+                <!-- SECTION C: ON-PAGE REFERRAL & LUCKY DRAW PARTICIPATION HUB -->
+                <div class="bg-[#0B0E17] p-6 rounded-2xl border border-amber-500/30 space-y-4">
+                    <div class="flex items-center space-x-3">
+                        <div class="w-10 h-10 bg-amber-500/10 rounded-xl border border-amber-500/30 flex items-center justify-center text-amber-400 text-xl">
+                            🚀
+                        </div>
+                        <div>
+                            <h4 class="text-base font-bold text-white">Share Portal Link to Participate & Climb to Top 10</h4>
+                            <p class="text-xs text-gray-400">Share your custom link with friends & WhatsApp groups. Every join instantly boosts your Bumper Draw Rank!</p>
+                        </div>
+                    </div>
+
+                    <!-- Web Application Referral Link Input Box -->
+                    <div class="space-y-1.5">
+                        <label class="text-[10px] font-bold text-amber-300 uppercase tracking-wider block">Your Web Application Share Link:</label>
+                        <div class="flex items-center space-x-2">
+                            <input type="text" id="referral-link-input" readonly value="https://utsavpass.com/ref?id=USR9821" class="w-full px-4 py-3 bg-[#141A29] border border-gray-700 rounded-xl text-amber-300 text-xs font-mono outline-none">
+                            <button onclick="copyReferralLink()" class="px-5 py-3 bg-amber-500 hover:bg-amber-400 text-black text-xs font-bold rounded-xl whitespace-nowrap transition cursor-pointer">
+                                📋 Copy Link
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- WhatsApp & Test Referral Simulator -->
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2">
+                        <button onclick="shareOnWhatsApp()" class="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-extrabold rounded-xl flex items-center justify-center space-x-2 shadow-lg cursor-pointer transition">
+                            <i class="fa-brands fa-whatsapp text-lg"></i>
+                            <span>Share on WhatsApp Groups</span>
+                        </button>
+                        <button onclick="simulateFriendInvite()" class="w-full py-3.5 bg-amber-500/10 border border-amber-500/30 hover:bg-amber-500/20 text-amber-300 text-xs font-extrabold rounded-xl flex items-center justify-center space-x-2 transition cursor-pointer">
+                            <span>⚡ Simulate Referral (+1 Rank Boost)</span>
+                        </button>
+                    </div>
+
+                    <div class="p-3 bg-[#141A29] rounded-xl border border-gray-800 text-center text-xs text-gray-400">
+                        Total Friend Invites Recorded: <strong id="ref-count-display" class="text-amber-400 font-bold">0 Invites</strong>
+                    </div>
+                </div>
+
+                <!-- SECTION D: SUBMIT & HOME BUTTON ACTION -->
+                <div class="pt-4 text-center space-y-3">
+                    <button id="final-submit-btn" onclick="handleFinalSubmit()" class="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-400 text-black font-extrabold rounded-2xl shadow-xl shadow-amber-500/20 text-sm uppercase tracking-wider hover:opacity-95 transition cursor-pointer">
+                        Submit Details & Lock Entry ✓
+                    </button>
+                    <div id="home-btn-container" class="hidden">
+                        <button onclick="goToHomePage()" class="w-full sm:w-auto px-10 py-4 bg-gradient-to-r from-blue-600 via-indigo-600 to-purple-600 text-white font-extrabold rounded-2xl shadow-xl shadow-blue-500/20 text-sm uppercase tracking-wider hover:opacity-95 transition cursor-pointer flex items-center justify-center space-x-2 mx-auto">
+                            <i class="fa-solid fa-house"></i>
+                            <span>Go to Home Page / Exit Web App</span>
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="w-full max-w-7xl mx-auto px-6 py-6 text-center text-xs text-gray-500 relative z-10 border-t border-gray-900/80">
+        <p>&copy; 2026 UTSAV PASS Technologies India. All rights reserved. Encrypted ISO-27001 Protocol.</p>
+    </footer>
+
+    <!-- Toast Notification Container -->
+    <div id="toast-container" class="fixed bottom-5 right-5 z-50 flex flex-col space-y-2 pointer-events-none"></div>
+
+    <!-- API CONNECTION SCRIPT -->
+    <script type="module">
+        import { loginWithPassword, sendOtp, verifyOtpAndLogin, registerUser, getTop10Bookings } from './api.js';
+        window.api = {
+            loginWithPassword,
+            sendOtp,
+            verifyOtpAndLogin,
+            registerUser,
+            getTop10Bookings,
+            bookTop9Slot,
+        };
+    </script>
+    
+    <!-- ================= JAVASCRIPT LOGIC ================= -->
+    <script>
+        // Default User & State Management
+        let currentUser = null;
+        let selectedPrizeName = "iPhone 16 Pro Max";
+        let userReferrals = 0;
+        let bookedVouchersList = [];
+        let currentStep = 'auth';
+
+        // Initializer on window load
+        window.addEventListener('DOMContentLoaded', () => {
+            initParticleCanvas();
+            startCountdownTimer();
+            startLiveTicker();
+
+            // Check persistent session
+            const savedUser = localStorage.getItem('utsav_user_session');
+            if (savedUser) {
+                currentUser = JSON.parse(savedUser);
+                userReferrals = currentUser.referralCount || 0;
+                bookedVouchersList = currentUser.bookedVouchers || [];
+                renderHeaderUserWidget();
+                
+                history.replaceState({ step: 'step-1' }, '', '#step-1');
+                renderStepUI('step-1');
+            } else {
+                history.replaceState({ step: 'auth' }, '', '#auth');
+                renderStepUI('auth');
+            }
+
+            setupOtpDigitInputs();
+        });
+
+        // ================= BROWSER BACK BUTTON NAVIGATION (popstate) =================
+        window.addEventListener('popstate', (event) => {
+            if (event.state && event.state.step) {
+                renderStepUI(event.state.step);
+            } else {
+                renderStepUI('auth');
+            }
+        });
+
+        function goToStep(targetStep, pushHistory = true) {
+            if (!currentUser && targetStep !== 'auth') {
+                showToast('Please login or sign up first!', 'error');
+                return;
+            }
+
+            if (pushHistory) {
+                history.pushState({ step: targetStep }, '', '#' + targetStep);
+            }
+            renderStepUI(targetStep);
+        }
+
+        function handleBackStep() {
+            if (currentStep === 'step-2') {
+                goToStep('step-1');
+            } else if (currentStep === 'step-1') {
+                if (confirm('Do you want to log out of your session?')) {
+                    handleLogout();
+                }
+            }
+        }
+
+        function renderStepUI(stepName) {
+            currentStep = stepName;
+
+            document.getElementById('auth-panel').classList.add('hidden');
+            document.getElementById('booking-step-panel').classList.add('hidden');
+            document.getElementById('unified-draw-panel').classList.add('hidden');
+
+            if (stepName === 'auth') {
+                document.getElementById('auth-panel').classList.remove('hidden');
+            } else if (stepName === 'step-1') {
+                document.getElementById('booking-step-panel').classList.remove('hidden');
+                updateVoucherSummaryUI();
+            } else if (stepName === 'step-2') {
+                document.getElementById('unified-draw-panel').classList.remove('hidden');
+                updateVipPassAndRankUI();
+            }
+
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function handleHeaderLogoClick() {
+            if (currentUser) {
+                goToStep('step-1');
+            } else {
+                goToStep('auth');
+            }
+        }
+
+        // ================= AUTHENTICATION HANDLERS =================
+        function switchAuthTab(type) {
+            const signupBtn = document.getElementById('tab-signup-btn');
+            const loginBtn = document.getElementById('tab-login-btn');
+            const signupForm = document.getElementById('signup-form');
+            const loginForm = document.getElementById('login-form');
+
+            if (type === 'signup') {
+                signupBtn.className = "flex-1 py-3 text-xs sm:text-sm font-bold rounded-xl transition-all duration-200 bg-gradient-to-r from-amber-500 to-orange-500 text-black shadow-lg";
+                loginBtn.className = "flex-1 py-3 text-xs sm:text-sm font-bold text-gray-400 hover:text-white rounded-xl transition-all duration-200";
+                signupForm.classList.remove('hidden');
+                loginForm.classList.add('hidden');
+            } else {
+                loginBtn.className = "flex-1 py-3 text-xs sm:text-sm font-bold rounded-xl transition-all duration-200 bg-gradient-to-r from-amber-500 to-orange-500 text-black shadow-lg";
+                signupBtn.className = "flex-1 py-3 text-xs sm:text-sm font-bold text-gray-400 hover:text-white rounded-xl transition-all duration-200";
+                loginForm.classList.remove('hidden');
+                signupForm.classList.add('hidden');
+            }
+        }
+
+        function toggleLoginType(type) {
+            const pwdGroup = document.getElementById('login-password-group');
+            const submitBtn = document.getElementById('login-submit-btn');
+            if (type === 'otp') {
+                pwdGroup.classList.add('hidden');
+                submitBtn.innerText = "Request OTP & Login →";
+            } else {
+                pwdGroup.classList.remove('hidden');
+                submitBtn.innerText = "Login to Utsav Dashboard →";
+            }
+        }
+
+        function fillDemoCredentials() {
+            document.getElementById('lg-identifier').value = "9876543210";
+            document.getElementById('lg-password').value = "password123";
+            showToast("Demo credentials loaded! Click Login.", "info");
+        }
+
+        async function handleSignupSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('su-name').value;
+            const mobile = document.getElementById('su-mobile').value;
+            const password = document.getElementById('su-password').value;
+        
+            // Backend API Call - Send OTP
+            const res = await window.api.sendOtp(mobile);
+            
+            if (res.status === 'success' || res.status === 200) {
+                window.pendingUser = { 
+                    name, phone: mobile, password, 
+                    ticketId: "UTSAV-" + Math.floor(10000 + Math.random() * 90000), 
+                    referralCount: 0, bookedVouchers: [] 
+                };
+                document.getElementById('otp-phone-display').innerText = "+91 " + mobile;
+                document.getElementById('otp-modal').classList.remove('hidden');
+                playChimeSound();
+                showToast("OTP sent to your mobile!", "success");
+            } else {
+                showToast(res.message || "Failed to send OTP", "error");
+            }
+        }
+
+        async function handleLoginSubmit(e) {
+            e.preventDefault();
+            const identifier = document.getElementById('lg-identifier').value;
+            const loginType = document.querySelector('input[name="login-type"]:checked').value;
+            const password = document.getElementById('lg-password').value; // Ye hidden ho sakta hai OTP case me
+        
+            if (loginType === 'otp') {
+                const res = await window.api.sendOtp(identifier);
+                if (res.status === 'success' || res.status === 200) {
+                    window.pendingUser = { phone: identifier, isLoginMode: true };
+                    document.getElementById('otp-phone-display').innerText = "+91 " + identifier;
+                    document.getElementById('otp-modal').classList.remove('hidden');
+                    showToast("OTP sent successfully!", "success");
+                } else {
+                    showToast(res.message || "Failed to send OTP", "error");
+                }
+                return;
+            }
+        
+            // Password Login API Call
+            const res = await window.api.loginWithPassword(identifier, password);
+            if (res.status === 'success') {
+                currentUser = {
+                    name: res.user.name || "Festive Member",
+                    mobile: res.user.phone || identifier,
+                    ticketId: res.user.ticketId || "UTSAV-" + Math.floor(10000 + Math.random() * 90000),
+                    referralCount: res.user.referralCount || 0,
+                    bookedVouchers: res.user.bookedVouchers || []
+                };
+                bookedVouchersList = currentUser.bookedVouchers;
+                userReferrals = currentUser.referralCount;
+                localStorage.setItem('utsav_user_session', JSON.stringify(currentUser));
+                renderHeaderUserWidget();
+                goToStep('step-1');
+                triggerConfetti();
+                showToast("Welcome back to Utsav Pass!", "success");
+            } else {
+                showToast(res.message || "Invalid credentials", "error");
+            }
+        }
+
+        // ================= OTP HANDLING (FIXED DUMMY OTP 123456) =================
+        function setupOtpDigitInputs() {
+            const boxes = document.querySelectorAll('.otp-box');
+            boxes.forEach((box, index) => {
+                box.addEventListener('input', (e) => {
+                    if (e.target.value.length === 1 && index < boxes.length - 1) {
+                        boxes[index + 1].focus();
+                    }
+                });
+                box.addEventListener('keydown', (e) => {
+                    if (e.key === 'Backspace' && !e.target.value && index > 0) {
+                        boxes[index - 1].focus();
+                    }
+                });
+            });
+        }
+
+        function autoFillDummyOtp() {
+            const boxes = document.querySelectorAll('.otp-box');
+            const dummyDigits = ['1','2','3','4','5','6'];
+            boxes.forEach((box, i) => box.value = dummyDigits[i]);
+            showToast("Demo OTP 123456 Auto-Filled!", "info");
+        }
+
+        async function verifyOtpAndProceed() {
+            const boxes = document.querySelectorAll('.otp-box');
+            let enteredOtp = "";
+            boxes.forEach(b => enteredOtp += b.value);
+        
+            if (enteredOtp.length !== 6) {
+                showToast("Please enter complete 6-digit OTP", "error");
+                return;
+            }
+        
+            let res;
+            if (window.pendingUser && !window.pendingUser.isLoginMode) {
+                // Registration API Call
+                res = await window.api.registerUser({ ...window.pendingUser, otp: enteredOtp });
+            } else {
+                // OTP Verify & Login API Call
+                res = await window.api.verifyOtpAndLogin(window.pendingUser.phone, enteredOtp);
+            }
+        
+            if (res.status === 'success') {
+                currentUser = {
+                    name: res.user?.name || window.pendingUser?.name || "Demo User",
+                    mobile: res.user?.phone || window.pendingUser?.phone || "9876543210",
+                    ticketId: res.user?.ticketId || "UTSAV-" + Math.floor(10000 + Math.random() * 90000),
+                    referralCount: res.user?.referralCount || 0,
+                    bookedVouchers: res.user?.bookedVouchers || []
+                };
+        
+                localStorage.setItem('utsav_user_session', JSON.stringify(currentUser));
+                closeOtpModal();
+                renderHeaderUserWidget();
+                goToStep('step-1');
+                triggerConfetti();
+                showToast("Phone Verified & Access Granted!", "success");
+            } else {
+                showToast(res.message || "Invalid OTP! Please try again.", "error");
+            }
+        }
+
+        function closeOtpModal() {
+            document.getElementById('otp-modal').classList.add('hidden');
+        }
+
+        function handleLogout() {
+            localStorage.removeItem('utsav_user_session');
+            currentUser = null;
+            renderHeaderUserWidget();
+            goToStep('auth');
+            showToast("Logged out successfully.", "info");
+        }
+
+        function renderHeaderUserWidget() {
+            const widget = document.getElementById('header-user-widget');
+            if (currentUser) {
+                widget.innerHTML = `
+                    <div class="flex items-center space-x-2 bg-[#141A29] px-3 py-1.5 rounded-xl border border-amber-500/30">
+                        <div class="w-7 h-7 rounded-full bg-amber-500 text-black font-extrabold flex items-center justify-center text-xs">
+                            ${currentUser.name.charAt(0)}
+                        </div>
+                        <div class="hidden sm:block text-left">
+                            <span class="text-xs font-bold text-white block leading-none">${currentUser.name}</span>
+                            <span class="text-[9px] text-amber-400 font-mono">${currentUser.ticketId}</span>
+                        </div>
+                        <button onclick="handleLogout()" class="text-xs text-gray-400 hover:text-red-400 ml-1 p-1">
+                            <i class="fa-solid fa-right-from-bracket"></i>
+                        </button>
+                    </div>
+                `;
+            } else {
+                widget.innerHTML = `
+                    <button onclick="goToStep('auth')" class="px-4 py-2 bg-amber-500/10 border border-amber-500/30 text-amber-300 text-xs font-bold rounded-xl hover:bg-amber-500/20 transition">
+                        Login / Register
+                    </button>
+                `;
+            }
+        }
+
+
+        // ================= MULTI-BRAND VOUCHER BOOKING =================
+        async function bookVoucherSlot(btnElement, platformName) {
+            if (!currentUser) return;
+
+            if (bookedVouchersList.includes(platformName)) {
+                showToast(`Already booked ${platformName} ₹2,000 slot!`, "info");
+                return;
+            }
+
+            try {
+                // Button ko disable kar rahe hain taaki multiple clicks na hon
+                btnElement.innerText = "Booking...";
+                btnElement.disabled = true;
+
+                // Backend call (Database me save karne ke liye)
+                await window.api.bookTop9Slot({
+                    userId: currentUser.id || currentUser.mobile,
+                    voucherName: platformName,
+                    amount: 2000
+                });
+
+                // Agar API success hui tabhi aage badhega
+                bookedVouchersList.push(platformName);
+                currentUser.bookedVouchers = bookedVouchersList;
+                localStorage.setItem('utsav_user_session', JSON.stringify(currentUser));
+
+                btnElement.className = "px-3 py-2 bg-emerald-600 text-white text-xs font-bold rounded-xl cursor-default";
+                btnElement.innerText = "Booked ✓";
+                
+                updateVoucherSummaryUI();
+                playChimeSound();
+                triggerConfetti();
+                showToast(`🎉 ₹2,000 ${platformName} Voucher Slot Reserved!`, "success");
+
+            } catch (error) {
+                btnElement.innerText = "Book Slot";
+                btnElement.disabled = false;
+                showToast(`Booking failed: ${error.message}`, "error");
+            }
+        }
+
+        function updateVoucherSummaryUI() {
+            const badge = document.getElementById('booked-count-badge');
+            const totalValue = bookedVouchersList.length * 2000;
+            badge.innerText = `${bookedVouchersList.length} of 16 Vouchers Claimed (₹${totalValue.toLocaleString()} Value Secured!)`;
+        }
+
+
+        // ================= UNIFIED DRAW SELECTION, PASS & REFERRALS =================
+        function selectBumperPrize(prizeId, cardElement) {
+            const names = {
+                'iphone': 'iPhone 16 Pro Max',
+                'macbook': 'MacBook Air M3',
+                'gold': '24K Pure Gold Coin (10g)',
+                'tv': '55" OLED 4K Smart TV',
+                'headphones': 'Sony Wireless Headphones',
+                'scooty': 'Vespa Festive Scooty'
+            };
+
+            selectedPrizeName = names[prizeId] || 'iPhone 16 Pro Max';
+
+            const cards = document.querySelectorAll('.bumper-card');
+            cards.forEach(c => {
+                c.classList.remove('border-amber-500', 'bg-amber-500/10');
+                c.classList.add('border-gray-800');
+            });
+
+            cardElement.classList.remove('border-gray-800');
+            cardElement.classList.add('border-amber-500', 'bg-amber-500/10');
+
+            document.getElementById('pass-selected-prize-name').innerText = selectedPrizeName;
+            playChimeSound();
+            showToast(`Bumper Preference Set: ${selectedPrizeName}`, "success");
+        }
+
+        function updateVipPassAndRankUI() {
+            if (!currentUser) return;
+            document.getElementById('pass-ticket-id').innerText = currentUser.ticketId || "#UTSAV-99120";
+            document.getElementById('pass-holder-name').innerText = currentUser.name || "Festive Member";
+            document.getElementById('pass-holder-phone').innerText = "+91 " + (currentUser.mobile || "XXXXXXXXXX");
+            document.getElementById('pass-selected-prize-name').innerText = selectedPrizeName;
+
+            // Update web application referral link
+            document.getElementById('referral-link-input').value = `https://utsavpass.com/ref?id=${currentUser.ticketId}`;
+            
+            // Dual Rankings Update
+            const slotRank = Math.max(12, 482 - (bookedVouchersList.length * 25));
+            document.getElementById('slot-rank-display').innerText = `#0${slotRank} / 2,000 (Guaranteed ✓)`;
+
+            updateReferralRankings();
+        }
+
+        function updateReferralRankings() {
+            document.getElementById('ref-count-display').innerText = `${userReferrals} Invites`;
+            const rankDisplay = document.getElementById('ref-rank-display');
+
+            if (userReferrals >= 3) {
+                rankDisplay.className = "text-base font-black text-emerald-400";
+                rankDisplay.innerText = `Rank #${Math.max(1, 11 - userReferrals)} (TOP 10 WINNER ZONE! 🔥)`;
+            } else {
+                rankDisplay.className = "text-base font-black text-amber-300";
+                rankDisplay.innerText = `Rank #${142 - (userReferrals * 40)} (Need 3 Referrals for Top 10)`;
+            }
+        }
+
+        function simulateFriendInvite() {
+            userReferrals++;
+            if (currentUser) {
+                currentUser.referralCount = userReferrals;
+                localStorage.setItem('utsav_user_session', JSON.stringify(currentUser));
+            }
+            updateReferralRankings();
+            playChimeSound();
+            triggerConfetti();
+            showToast("⚡ Friend Referral Simulated! Lucky Draw Rank Boosted!", "success");
+        }
+
+        function shareOnWhatsApp() {
+            const message = encodeURIComponent(`🪔 Join UTSAV PASS 2026 Diwali Mega Festival! Get 100% Guaranteed ₹2,000 Shopping Vouchers for Amazon, Apple, Blinkit, Reliance Digital + Enter Top 10 Bumper Draw for iPhone 16 Pro! Claim here: https://utsavpass.com/ref?id=${currentUser ? currentUser.ticketId : 'OFFER'}`);
+            window.open(`https://api.whatsapp.com/send?text=${message}`, '_blank');
+        }
+
+        function copyReferralLink() {
+            const copyText = document.getElementById("referral-link-input");
+            copyText.select();
+            navigator.clipboard.writeText(copyText.value);
+            showToast("Referral Web App Link copied to clipboard!", "success");
+        }
+
+        // ================= FINAL SUBMIT & HOME BUTTON HANDLERS =================
+        function handleFinalSubmit() {
+            document.getElementById('final-submit-btn').classList.add('hidden');
+            document.getElementById('home-btn-container').classList.remove('hidden');
+            playChimeSound();
+            triggerConfetti();
+            showToast("Details Successfully Submitted! Click Home Button below to navigate.", "success");
+        }
+
+        function goToHomePage() {
+            if (currentUser) {
+                goToStep('step-1');
+            } else {
+                goToStep('auth');
+            }
+            // Reset submit button state for future visits
+            document.getElementById('final-submit-btn').classList.remove('hidden');
+            document.getElementById('home-btn-container').classList.add('hidden');
+        }
+
+
+        // ================= UTILITIES & ANIMATIONS =================
+        function showToast(message, type = 'info') {
+            const container = document.getElementById('toast-container');
+            const toast = document.createElement('div');
+            
+            let bgBg = 'bg-[#141A29] border-amber-500/40 text-amber-300';
+            if (type === 'success') bgBg = 'bg-[#141A29] border-emerald-500/40 text-emerald-300';
+            if (type === 'error') bgBg = 'bg-[#141A29] border-red-500/40 text-red-300';
+
+            toast.className = `p-4 rounded-xl border ${bgBg} shadow-xl text-xs font-bold pointer-events-auto flex items-center space-x-2 transition-all transform translate-y-2 opacity-0`;
+            toast.innerHTML = `<span>${message}</span>`;
+            
+            container.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.remove('translate-y-2', 'opacity-0');
+            }, 10);
+
+            setTimeout(() => {
+                toast.classList.add('opacity-0');
+                setTimeout(() => toast.remove(), 300);
+            }, 3500);
+        }
+
+        function triggerConfetti() {
+            if (typeof confetti === 'function') {
+                confetti({
+                    particleCount: 70,
+                    spread: 60,
+                    origin: { y: 0.7 },
+                    colors: ['#FFD700', '#F59E0B', '#10B981', '#EF4444']
+                });
+            }
+        }
+
+        function playChimeSound() {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.type = 'sine';
+                osc.frequency.setValueAtTime(587.33, ctx.currentTime);
+                osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.2);
+                gain.gain.setValueAtTime(0.1, ctx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+                osc.start();
+                osc.stop(ctx.currentTime + 0.2);
+            } catch(e) {}
+        }
+
+        function startCountdownTimer() {
+            let totalSecs = 16692;
+            setInterval(() => {
+                totalSecs--;
+                if (totalSecs < 0) totalSecs = 16692;
+                const hrs = Math.floor(totalSecs / 3600);
+                const mins = Math.floor((totalSecs % 3600) / 60);
+                const secs = totalSecs % 60;
+                document.getElementById('timer-hrs').innerText = String(hrs).padStart(2, '0');
+                document.getElementById('timer-mins').innerText = String(mins).padStart(2, '0');
+                document.getElementById('timer-secs').innerText = String(secs).padStart(2, '0');
+            }, 1000);
+        }
+
+        async function startLiveTicker() {
+            // Backend se Bookings fetch karein
+            const res = await window.api.getTop10Bookings();
+            let updates = [];
+            
+            if (res.status === 'success' && res.bookings && res.bookings.length > 0) {
+                // Keval Top 9 Bookings nikalna
+                const top9 = res.bookings.slice(0, 9);
+                updates = top9.map(b => `${b.userName || 'A User'} booked ${b.voucherName || 'Vouchers'}`);
+            } else {
+                // Backend fail hone par fallback (Taki UI kharab na ho)
+                updates = [
+                    "Rahul S. from Mumbai booked Amazon & Apple Store ₹2,000 Vouchers",
+                    "Priya M. booked Blinkit & Zepto Grocery Slots",
+                    "Amit K. from Delhi reserved iPhone 16 Pro Draw Preference"
+                ];
+            }
+        
+            let idx = 0;
+            const tickerElement = document.getElementById('ticker-text');
+            tickerElement.innerText = updates[idx]; 
+            
+            setInterval(() => {
+                idx = (idx + 1) % updates.length;
+                tickerElement.innerText = updates[idx];
+            }, 4000);
+        }
+
+        function initParticleCanvas() {
+            const canvas = document.getElementById('sparkle-canvas');
+            const ctx = canvas.getContext('2d');
+            let particles = [];
+
+            function resize() {
+                canvas.width = window.innerWidth;
+                canvas.height = window.innerHeight;
+            }
+            resize();
+            window.addEventListener('resize', resize);
+
+            for (let i = 0; i < 40; i++) {
+                particles.push({
+                    x: Math.random() * canvas.width,
+                    y: Math.random() * canvas.height,
+                    r: Math.random() * 2 + 1,
+                    d: Math.random() * 0.5 + 0.2
+                });
+            }
+
+            function draw() {
+                ctx.clearRect(0, 0, canvas.width, canvas.height);
+                ctx.fillStyle = '#FFD700';
+                particles.forEach(p => {
+                    ctx.beginPath();
+                    ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+                    ctx.fill();
+                    p.y -= p.d;
+                    if (p.y < 0) p.y = canvas.height;
+                });
+                requestAnimationFrame(draw);
+            }
+            draw();
+        }
+    </script>
+</body>
+</html>
