@@ -564,7 +564,7 @@
                     <!-- Bumper Gifts Grid -->
                     <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3" id="bumper-prizes-grid">
                         
-                        <!-- iPhone 16 Pro Max -->
+                        <!-- iPhone 18 Pro Max -->
                         <div onclick="selectBumperPrize('iphone', this)" class="bumper-card p-4 bg-[#0B0E17] border-2 border-gray-800 hover:border-amber-500 rounded-2xl cursor-pointer transition relative group">
                             <div class="flex items-center justify-between">
                                 <span class="text-3xl">📱</span>
@@ -659,7 +659,7 @@
                         </div>
                         <div class="col-span-2 sm:col-span-1">
                             <span class="text-gray-400 block text-[10px] uppercase">SELECTED BUMPER PRIZE</span>
-                            <span id="pass-selected-prize-name" class="text-amber-300 font-extrabold text-sm">iPhone 16 Pro Max</span>
+                            <span id="pass-selected-prize-name" class="text-amber-300 font-extrabold text-sm">iPhone 18 Pro Max</span>
                         </div>
                     </div>
 
@@ -791,7 +791,7 @@
     <script>
         // Default User & State Management
         let currentUser = null;
-        let selectedPrizeName = "iPhone 16 Pro Max";
+        let selectedPrizeName = "iPhone 18 Pro Max";
         let userReferrals = 0;
         let bookedVouchersList = [];
         let currentStep = 'auth';
@@ -1147,7 +1147,7 @@
         // ================= UNIFIED DRAW SELECTION, PASS & REFERRALS =================
         function selectBumperPrize(prizeId, cardElement) {
             const names = {
-                'iphone': 'iPhone 16 Pro Max',
+                'iphone': 'iPhone 18 Pro Max',
                 'macbook': 'MacBook Air M3',
                 'gold': '24K Pure Gold Coin (10g)',
                 'tv': '55" OLED 4K Smart TV',
@@ -1155,7 +1155,7 @@
                 'scooty': 'Vespa Festive Scooty'
             };
 
-            selectedPrizeName = names[prizeId] || 'iPhone 16 Pro Max';
+            selectedPrizeName = names[prizeId] || 'iPhone 18 Pro Max';
 
             const cards = document.querySelectorAll('.bumper-card');
             cards.forEach(c => {
@@ -1214,7 +1214,7 @@
         }
 
         function shareOnWhatsApp() {
-            const message = encodeURIComponent(`🪔 Join UTSAV PASS 2026 Diwali Mega Festival! Get 100% Guaranteed ₹2,000 Shopping Vouchers for Amazon, Apple, Blinkit, Reliance Digital + Enter Top 10 Bumper Draw for iPhone 16 Pro! Claim here: https://utsavpass.com/ref?id=${currentUser ? currentUser.ticketId : 'OFFER'}`);
+            const message = encodeURIComponent(`🪔 Join UTSAV PASS 2026 Diwali Mega Festival! Get 100% Guaranteed ₹2,000 Shopping Vouchers for Amazon, Apple, Blinkit, Reliance Digital + Enter Top 10 Bumper Draw for iPhone 18 Pro Max! Claim here: https://diwali-beige.vercel.app/=${currentUser ? currentUser.ticketId : 'OFFER'}`);
             window.open(`https://api.whatsapp.com/send?text=${message}`, '_blank');
         }
 
@@ -1330,7 +1330,7 @@
                 updates = [
                     "Rahul S. from Mumbai booked Amazon & Apple Store ₹2,000 Vouchers",
                     "Priya M. booked Blinkit & Zepto Grocery Slots",
-                    "Amit K. from Delhi reserved iPhone 16 Pro Draw Preference"
+                    "Amit K. from Delhi reserved iPhone 18 Pro Max Draw Preference"
                 ];
             }
             
